@@ -1,7 +1,10 @@
 {
-  "name": "chains",
+  "name": "@zoralabs/chains",
   "version": "1.0.0",
   "main": "index.js",
+  "bin": {
+    "chains": "./index.js"
+  },
   "license": "MIT",
   "dependencies": {
     "@wagmi/chains": "^1.8.0",
