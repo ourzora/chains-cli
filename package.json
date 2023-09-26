@@ -1,9 +1,10 @@
 {
   "name": "@zoralabs/chains",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
+  "files": ["bin", "./index.js"],
   "bin": {
-    "chains": "./index.js"
+    "chains": "./bin/chains"
   },
   "license": "MIT",
   "dependencies": {
