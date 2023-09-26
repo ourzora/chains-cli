@@ -1,0 +1,10 @@
+{
+  "name": "chains",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@wagmi/chains": "^1.8.0",
+    "yargs": "^17.7.2"
+  }
+}
