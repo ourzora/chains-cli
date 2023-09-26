@@ -33,8 +33,8 @@ const globalConfig = readConfigFile('config.json');
 function updateChainConfig(config) {
   let rpcUrl = config.rpcUrls.public?.http[0];
 
-  if (globalConfig.alchemyKey && config.rpcUrls.alchemy) {
-    rpcUrl = `${config.rpcUrls.alchemy.http[0]}/${alchemyKey}`;
+  if (globalConfig.alchemyApiKey && config.rpcUrls.alchemy) {
+    rpcUrl = `${config.rpcUrls.alchemy.http[0]}/${globalConfig.alchemyApiKey}`;
   }
 
   return {
@@ -80,9 +80,9 @@ function getConfig(fn) {
 }
 
 yargs(hideBin(process.argv))
-  .command('forge [chain]', 'print output for forge', () => {}, getConfig(forge))
-  .command('etherscan [chain]', 'print etherscan api key', () => {}, getConfig(etherscan))
-  .command('rpc [chain]', 'print rpc url', () => {}, getConfig(rpc))
-  .command('explorer [chain]', 'open block explorer', () => {}, getConfig(explorer))
+  .command('forge <chain>', 'print output for forge', () => {}, getConfig(forge))
+  .command('etherscan <chain>', 'print etherscan api key', () => {}, getConfig(etherscan))
+  .command('rpc <chain>', 'print rpc url', () => {}, getConfig(rpc))
+  .command('explorer <chain>', 'open block explorer', () => {}, getConfig(explorer))
   .parse()
 
