@@ -4,7 +4,8 @@
   "main": "index.js",
   "files": ["bin", "./index.js"],
   "bin": {
-    "chains": "./bin/chains"
+    "chains": "./bin/chains",
+    "@zoralabs/chains": "./bin/chains"
   },
   "license": "MIT",
   "dependencies": {
