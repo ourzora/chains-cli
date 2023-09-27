@@ -37,7 +37,12 @@ function updateChainConfig(config) {
     rpcUrl = `${config.rpcUrls.alchemy.http[0]}/${globalConfig.alchemyApiKey}`;
   }
 
+  if (rpcUrl.includes('$alchemyApiKey')) {
+    rpcUrl = rpcUrl.replace('$alchemyApiKey', globalConfig.alchemyApiKey);
+  }
+
   return {
+    id: config.id,
     rpcUrl,
     blockExplorer: config.blockExplorers?.default?.url,
     etherscanUrl: config.blockExplorers?.etherscan?.url,
@@ -48,14 +53,31 @@ for (const chain of Object.keys(wagmiChains)) {
   wagmiKnownChains[kebabize(chain)] = updateChainConfig(wagmiChains[chain]);
 }
 
-function forge(config) {
+function forge(config, args) {
+  if (args.verify) {
+    const command = [`--chain ${config.id}`];
+    if (config.etherscanApiKey) {
+      command.push(`--etherscan-api-key ${config.etherscanApiKey}`);
+    } else {
+      command.push(`--verifier-url ${config.verifierUrl} --verifier blockscout`);
+    }
+    console.log(command.join(' '));
+    return;
+  }
+
+  if (args.deploy) {
+    const command = [`--rpc-url ${config.rpcUrl}`];
+    if (config.verifierUrl) {
+      command.push(`--verifier-url ${config.verifierUrl} --verifier blockscout`);
+    }
+    if (config.etherscanApiKey) {
+      command.push(`--etherscan-api-key ${config.etherscanApiKey}`);
+    }
+    console.log(command.join(' '));
+    return;
+  }
+
   const command = [`--rpc-url ${config.rpcUrl}`];
-  if (config.verifierUrl) {
-    command.push(`--verifier-url ${config.verifierUrl}`);
-  }
-  if (config.etherscanApiKey) {
-    command.push(`--etherscan-api-key ${config.etherscanApiKey}`);
-  }
   console.log(command.join(' '));
 }
 
@@ -73,14 +95,16 @@ function rpc(config) {
 }
 
 function getConfig(fn) {
-  return ({chain}) => {
+  return ({chain, ...rest}) => {
     const configFileOverrides = readConfigFile(`${chain}.json`);
-    fn(Object.assign({}, wagmiKnownChains[chain], configFileOverrides));
+    fn(Object.assign({}, wagmiKnownChains[chain], configFileOverrides), rest);
   }
 }
 
 yargs(hideBin(process.argv))
-  .command('forge <chain>', 'print output for forge', () => {}, getConfig(forge))
+  .command(['forge <chain>', '$0 <chain>'], 'print output for forge', (yargs) => {
+    yargs.option('verify', {desc: 'Verify contract'}).option('deploy', {desc: 'Deploy contract'})
+  }, getConfig(forge))
   .command('etherscan <chain>', 'print etherscan api key', () => {}, getConfig(etherscan))
   .command('rpc <chain>', 'print rpc url', () => {}, getConfig(rpc))
   .command('explorer <chain>', 'open block explorer', () => {}, getConfig(explorer))
