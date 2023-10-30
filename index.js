@@ -8,10 +8,10 @@ const {join} = require('path')
 const {homedir} = require('os');
 const fs = require('fs')
 
-const kebabize = (str) => 
+const kebabize = (str) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase())
 
-const wagmiKnownChains = {} 
+const wagmiKnownChains = {}
 
 function readConfigFile(path) {
   const prefix = '.chains';
@@ -53,13 +53,17 @@ for (const chain of Object.keys(wagmiChains)) {
   wagmiKnownChains[kebabize(chain)] = updateChainConfig(wagmiChains[chain]);
 }
 
+function escapeVerifierUrl(url) {
+  return url.replace("\\?", "?");
+}
+
 function forge(config, args) {
   if (args.verify) {
     const command = [`--chain ${config.id}`];
     if (config.etherscanApiKey) {
       command.push(`--etherscan-api-key ${config.etherscanApiKey}`);
     } else {
-      command.push(`--verifier-url ${config.verifierUrl} --verifier blockscout`);
+      command.push(`--verifier-url ${escapeVerifierUrl(config.verifierUrl)} --verifier blockscout`);
     }
     console.log(command.join(' '));
     return;
@@ -68,7 +72,7 @@ function forge(config, args) {
   if (args.deploy) {
     const command = [`--rpc-url ${config.rpcUrl}`];
     if (config.verifierUrl) {
-      command.push(`--verifier-url ${config.verifierUrl} --verifier blockscout`);
+      command.push(`--verifier-url ${escapeVerifierUrl(config.verifierUrl)} --verifier blockscout`);
     }
     if (config.etherscanApiKey) {
       command.push(`--etherscan-api-key ${config.etherscanApiKey}`);
