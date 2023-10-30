@@ -13,9 +13,11 @@ const kebabize = (str) =>
 
 const wagmiKnownChains = {} 
 
+const configDirectoryPrefix = '.chains'
+const configDirectory = join(homedir(), configDirectoryPrefix);
+
 function readConfigFile(path) {
-  const prefix = '.chains';
-  const fullPath = join(homedir(), prefix, path);
+  const fullPath = join(configDirectory, path);
   if (fs.existsSync(fullPath)) {
     try {
       return JSON.parse(fs.readFileSync(fullPath));
@@ -94,6 +96,15 @@ function rpc(config) {
   console.log(config.rpcUrl);
 }
 
+function updateChainsConfigRepo() {
+  console.log('Updating repo...');
+  const command = 'git pull origin main';
+  console.log(`running: ${command}`);
+  const proc = exec(command, {cwd: configDirectory});
+  proc.stdout.pipe(process.stdout);
+  proc.stderr.pipe(process.stderr);
+}
+
 function getConfig(fn) {
   return ({chain, ...rest}) => {
     const configFileOverrides = readConfigFile(`${chain}.json`);
@@ -108,5 +119,6 @@ yargs(hideBin(process.argv))
   .command('etherscan <chain>', 'print etherscan api key', () => {}, getConfig(etherscan))
   .command('rpc <chain>', 'print rpc url', () => {}, getConfig(rpc))
   .command('explorer <chain>', 'open block explorer', () => {}, getConfig(explorer))
+  .command('update', 'Updates repo with remote main', () => {}, updateChainsConfigRepo)
   .parse()
 
