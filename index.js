@@ -3,7 +3,7 @@ const { exec } = require('node:child_process');
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 const argv = yargs(hideBin(process.argv)).argv
-const wagmiChains = require('@wagmi/chains')
+const wagmiChains = require('viem/chains')
 const {join} = require('path')
 const {homedir} = require('os');
 const fs = require('fs')
@@ -33,7 +33,7 @@ const globalConfig = readConfigFile('config.json');
 
 
 function updateChainConfig(config) {
-  let rpcUrl = config.rpcUrls.public?.http[0];
+  let rpcUrl = config.rpcUrls.default?.http[0];
 
   if (globalConfig.alchemyApiKey && config.rpcUrls.alchemy) {
     rpcUrl = `${config.rpcUrls.alchemy.http[0]}/${globalConfig.alchemyApiKey}`;
