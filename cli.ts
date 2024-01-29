@@ -2,7 +2,8 @@
 import { exec } from "node:child_process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { WagmiKnownChain, configDirectory, getConfig } from ".";
+import { WagmiKnownChain } from ".";
+import { configDirectory, getChainConfig } from "lib";
 
 function explorer(config: WagmiKnownChain) {
   exec(`open ${config.etherscanUrl || config.blockExplorer}`);
@@ -58,6 +59,12 @@ function updateChainsConfigRepo() {
   const proc = exec(command, { cwd: configDirectory });
   proc.stdout?.pipe(process.stdout);
   proc.stderr?.pipe(process.stderr);
+}
+
+function getConfig(fn: (config: WagmiKnownChain, args: any) => void) {
+  return async ({ chain, ...rest }: { chain: string; [key: string]: any }) => {
+    fn(await getChainConfig(chain), rest);
+  };
 }
 
 yargs(hideBin(process.argv))

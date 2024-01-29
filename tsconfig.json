@@ -20,5 +20,5 @@
     "baseUrl": ".",
     "outDir": "dist",
   },
-  "include": ["*.ts"],
+  "include": ["index.ts", "cli.ts"],
 }
