@@ -16,6 +16,9 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ESNext",
-    "types": ["node"]
-  }
+    "types": ["node"],
+    "baseUrl": ".",
+    "outDir": "dist",
+  },
+  "include": ["*.ts"],
 }
