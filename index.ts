@@ -1,1 +1,1 @@
-export { getChainConfig, type WagmiKnownChain } from "./lib";
+export { getChain, type ChainConfig as WagmiKnownChain } from "./lib";

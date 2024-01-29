@@ -1,4 +1,4 @@
-import wagmiChains, { Chain } from "viem/chains";
+import * as wagmiChains from "viem/chains";
 import { join } from "path";
 import { homedir } from "os";
 import fs from "fs";
@@ -31,7 +31,9 @@ async function readConfigFile(path: string) {
 
 const getGlobalConfig = () => readConfigFile("config.json");
 
-async function updateChainConfig(config: Chain): Promise<WagmiKnownChain> {
+async function updateChainConfig(
+  config: wagmiChains.Chain
+): Promise<ChainConfig> {
   let rpcUrl = config.rpcUrls.default?.http[0];
 
   const globalConfig = await getGlobalConfig();
@@ -52,9 +54,9 @@ async function updateChainConfig(config: Chain): Promise<WagmiKnownChain> {
   };
 }
 
-type WagmiKnownChains = Record<string, WagmiKnownChain>;
+type WagmiKnownChains = Record<string, ChainConfig>;
 
-export type WagmiKnownChain = {
+export type ChainConfig = {
   id: number;
   rpcUrl: string | undefined;
   blockExplorer: string | undefined;
@@ -70,7 +72,7 @@ const kebabize = (str: string) =>
   );
 
 export async function buildWagmiKnownChains(): Promise<WagmiKnownChains> {
-  const wagmiKnownChains: Record<string, WagmiKnownChain> = {};
+  const wagmiKnownChains: Record<string, ChainConfig> = {};
   for (const chain of Object.keys(wagmiChains)) {
     wagmiKnownChains[kebabize(chain)] = await updateChainConfig(
       wagmiChains[chain as keyof typeof wagmiChains]
@@ -90,7 +92,7 @@ const combineWithWagmiKnownChain = async (
   };
 };
 
-export const getChainConfig = async (chain: string) => {
+export const getChain = async (chain: string) => {
   const configFileOverrides = await readConfigFile(`${chain}.json`);
 
   return combineWithWagmiKnownChain(chain, configFileOverrides);

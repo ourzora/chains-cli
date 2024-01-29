@@ -3,7 +3,7 @@ import { exec } from "node:child_process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { WagmiKnownChain } from ".";
-import { configDirectory, getChainConfig } from "lib";
+import { configDirectory, getChain } from "lib";
 
 function explorer(config: WagmiKnownChain) {
   exec(`open ${config.etherscanUrl || config.blockExplorer}`);
@@ -63,7 +63,7 @@ function updateChainsConfigRepo() {
 
 function getConfig(fn: (config: WagmiKnownChain, args: any) => void) {
   return async ({ chain, ...rest }: { chain: string; [key: string]: any }) => {
-    fn(await getChainConfig(chain), rest);
+    fn(await getChain(chain), rest);
   };
 }
 
