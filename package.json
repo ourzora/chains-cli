@@ -1,6 +1,6 @@
 {
   "name": "@zoralabs/chains",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "index.js",
   "files": [
     "bin",
@@ -11,7 +11,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "viem": "^2.5.0",
+    "viem": "^2.21.40",
     "yargs": "^17.7.2"
   }
 }

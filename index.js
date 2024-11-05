@@ -12,6 +12,7 @@ const kebabize = (str) =>
   str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? "-" : "") + $.toLowerCase())
 
 const wagmiKnownChains = {} 
+const knownChainsById = {} 
 
 const configDirectoryPrefix = '.chains'
 const configDirectory = join(homedir(), configDirectoryPrefix);
@@ -53,6 +54,7 @@ function updateChainConfig(config) {
 
 for (const chain of Object.keys(wagmiChains)) {
   wagmiKnownChains[kebabize(chain)] = updateChainConfig(wagmiChains[chain]);
+  knownChainsById[wagmiChains[chain].id] = kebabize(chain);
 }
 
 function forge(config, args) {
@@ -107,6 +109,9 @@ function updateChainsConfigRepo() {
 
 function getConfig(fn) {
   return ({chain, ...rest}) => {
+    if (knownChainsById[chain]) {
+      chain = knownChainsById[chain];
+    }
     const configFileOverrides = readConfigFile(`${chain}.json`);
     fn(Object.assign({}, wagmiKnownChains[chain], configFileOverrides), rest);
   }
