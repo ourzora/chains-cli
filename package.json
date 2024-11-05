@@ -1,17 +1,29 @@
 {
   "name": "@zoralabs/chains",
-  "version": "1.4.0",
-  "main": "index.js",
+  "version": "1.4.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "bin",
-    "./index.js"
+    "dist",
+    "*.ts"
   ],
   "bin": {
     "chains": "./bin/chains"
   },
   "license": "MIT",
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "viem": "^2.21.40",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/yargs": "^17.0.32",
+    "prettier": "^3.2.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
   }
 }
