@@ -13,7 +13,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "chains": "tsx cli.ts"
   },
   "dependencies": {
     "viem": "^2.22.8",
