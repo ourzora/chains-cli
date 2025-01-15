@@ -21,6 +21,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@changesets/cli": "2.26.2",
     "@types/yargs": "^17.0.32",
     "prettier": "^3.2.4",
     "tsup": "^8.0.1",
