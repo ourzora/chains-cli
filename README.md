@@ -4,7 +4,7 @@ Get chain information for forge/foundry when deploying
 
 ## chains cli
 
-The chains cli is command line a utility for getting chain information for forge/foundry when deploying.
+The chains cli is a command line utility for getting chain information for forge/foundry when deploying.
 
 ### installing
 
